@@ -68,6 +68,13 @@ module Dry
       def call(input)
         transproc.call(input)
       end
+
+      # Create an incremental session for this declarative pipeline
+      #
+      # @api public
+      def incremental_session(rows = [], **options)
+        Incremental::Session.new(transproc.to_ast, rows, **options)
+      end
     end
   end
 end

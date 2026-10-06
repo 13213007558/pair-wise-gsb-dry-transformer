@@ -16,7 +16,17 @@
 - [API documentation](http://rubydoc.info/gems/dry-transformer)
 - [Forum](https://discourse.dry-rb.org)
 
+## Incremental sessions
+
+Use `Pipe#incremental_session` with stable row IDs to maintain a previous
+result and receive `inserted`, `updated`, and `deleted` deltas for insert,
+update, and delete events.
+
+Supported declarative steps are `map_array`, `filter_array`/`filter`,
+`rename_keys`, `group`, and retractable `aggregate` count/sums. A `Proc`
+cannot be safely updated incrementally and raises
+`Dry::Transformer::Incremental::UnsupportedTransformationError`.
+
 ## License
 
 See `LICENSE` file.
-
