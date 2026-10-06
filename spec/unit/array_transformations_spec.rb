@@ -90,6 +90,35 @@ RSpec.describe Dry::Transformer::ArrayTransformations do
 
   it { expect(described_class).not_to be_contain(:map_array!) }
 
+  describe ".filter" do
+    it "returns values accepted by the predicate" do
+      filter = described_class.t(:filter, :odd?.to_proc)
+
+      expect(filter.call([1, 2, 3, 4])).to eql([1, 3])
+      expect(described_class.t(:select, :odd?.to_proc).call([1, 2])).to eql([1])
+    end
+  end
+
+  describe ".flat_map" do
+    it "flattens one level returned by the function" do
+      flat_map = described_class.t(:flat_map, -> value { [value, -value] })
+
+      expect(flat_map.call([1, 2])).to eql([1, -1, 2, -2])
+    end
+  end
+
+  describe ".take" do
+    it "returns the requested number of values" do
+      expect(described_class.t(:take, 2).call([1, 2, 3])).to eql([1, 2])
+    end
+  end
+
+  describe ".partition" do
+    it "splits values into fixed-sized groups" do
+      expect(described_class.t(:partition, 2).call([1, 2, 3])).to eql([[1, 2], [3]])
+    end
+  end
+
   describe ".wrap" do
     it "returns a new array with wrapped hashes" do
       wrap = described_class.t(:wrap, :task, [:title])

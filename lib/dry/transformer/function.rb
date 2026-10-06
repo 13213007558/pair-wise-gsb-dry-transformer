@@ -49,6 +49,12 @@ module Dry
       end
       alias_method :[], :call
 
+      def transduce(input, reducer = Undefined, initial = Undefined, &block)
+        Stream.transduce(self, input, reducer, initial, &block)
+      end
+
+      alias_method :stream, :transduce
+
       # Compose this function with another function or a proc
       #
       # @param [Proc,Function]

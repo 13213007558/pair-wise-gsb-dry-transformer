@@ -38,8 +38,46 @@ module Dry
       # @return [Array]
       #
       # @api public
-      def self.map_array(array, fn)
+      def self.map(array, fn)
         Array(array).map { |value| fn[value] }
+      end
+
+      class << self
+        alias_method :map_array, :map
+      end
+
+      def self.filter(array, fn)
+        Array(array).select { |value| fn[value] }
+      end
+
+      class << self
+        alias_method :filter_array, :filter
+        alias_method :select, :filter
+        alias_method :select_array, :filter
+      end
+
+      def self.flat_map(array, fn)
+        Array(array).flat_map { |value| fn[value] }
+      end
+
+      class << self
+        alias_method :flat_map_array, :flat_map
+      end
+
+      def self.take(array, count)
+        Array(array).first(count)
+      end
+
+      class << self
+        alias_method :take_array, :take
+      end
+
+      def self.partition(array, size)
+        Array(array).each_slice(size).to_a
+      end
+
+      class << self
+        alias_method :partition_array, :partition
       end
 
       # Wrap array values using HashTransformations.nest function

@@ -68,6 +68,12 @@ module Dry
       def call(input)
         transproc.call(input)
       end
+
+      def transduce(input, reducer = Undefined, initial = Undefined, &block)
+        transproc.transduce(input, reducer, initial, &block)
+      end
+
+      alias_method :stream, :transduce
     end
   end
 end
