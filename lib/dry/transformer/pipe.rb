@@ -68,6 +68,17 @@ module Dry
       def call(input)
         transproc.call(input)
       end
+
+      # Execute the pipeline as a fused streaming transformation.
+      #
+      # @return [Object]
+      #
+      # @api public
+      def stream(input, reducer = Undefined, initial = Undefined, &block)
+        transproc.stream(input, reducer, initial, &block)
+      end
+
+      alias_method :transduce, :stream
     end
   end
 end

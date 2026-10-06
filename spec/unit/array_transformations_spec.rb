@@ -90,6 +90,54 @@ RSpec.describe Dry::Transformer::ArrayTransformations do
 
   it { expect(described_class).not_to be_contain(:map_array!) }
 
+  describe ".map" do
+    it "is an eager alias for .map_array" do
+      map = described_class.t(:map, -> value { value * 2 })
+
+      expect(map[[1, 2]]).to eql([2, 4])
+    end
+  end
+
+  describe ".filter" do
+    it "returns values accepted by the predicate" do
+      filter = described_class.t(:filter, -> value { value.odd? })
+
+      expect(filter[[1, 2, 3, 4]]).to eql([1, 3])
+    end
+  end
+
+  it { expect(described_class).not_to be_contain(:filter!) }
+
+  describe ".flat_map" do
+    it "flattens one level of arrays returned by the function" do
+      flat_map = described_class.t(:flat_map, -> value { [value, -value] })
+
+      expect(flat_map[[1, 2]]).to eql([1, -1, 2, -2])
+    end
+  end
+
+  it { expect(described_class).not_to be_contain(:flat_map!) }
+
+  describe ".take" do
+    it "returns at most the requested number of values" do
+      take = described_class.t(:take, 2)
+
+      expect(take[[1, 2, 3]]).to eql([1, 2])
+    end
+  end
+
+  it { expect(described_class).not_to be_contain(:take!) }
+
+  describe ".partition" do
+    it "returns fixed-size groups and keeps the final partial group" do
+      partition = described_class.t(:partition, 2)
+
+      expect(partition[[1, 2, 3]]).to eql([[1, 2], [3]])
+    end
+  end
+
+  it { expect(described_class).not_to be_contain(:partition!) }
+
   describe ".wrap" do
     it "returns a new array with wrapped hashes" do
       wrap = described_class.t(:wrap, :task, [:title])

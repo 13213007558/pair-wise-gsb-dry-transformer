@@ -42,6 +42,78 @@ module Dry
         Array(array).map { |value| fn[value] }
       end
 
+      class << self
+        alias_method :map, :map_array
+      end
+
+      # Filter array values using predicate function
+      #
+      # @example
+      #   fn = Dry::Transformer(:filter, -> value { value.even? })
+      #
+      #   fn.call([1, 2, 3]) # => [2]
+      #
+      # @param [Array] array The input array
+      # @param [Proc] fn The predicate function
+      #
+      # @return [Array]
+      #
+      # @api public
+      def self.filter(array, fn)
+        Array(array).select { |value| fn[value] }
+      end
+
+      # Flat-map array values using transformation function
+      #
+      # @example
+      #   fn = Dry::Transformer(:flat_map, -> value { [value, -value] })
+      #
+      #   fn.call([1, 2]) # => [1, -1, 2, -2]
+      #
+      # @param [Array] array The input array
+      # @param [Proc] fn The transformation function
+      #
+      # @return [Array]
+      #
+      # @api public
+      def self.flat_map(array, fn)
+        Array(array).flat_map { |value| fn[value] }
+      end
+
+      # Take at most the requested number of array values
+      #
+      # @example
+      #   fn = Dry::Transformer(:take, 2)
+      #
+      #   fn.call([1, 2, 3]) # => [1, 2]
+      #
+      # @param [Array] array The input array
+      # @param [Integer] count The maximum number of values
+      #
+      # @return [Array]
+      #
+      # @api public
+      def self.take(array, count)
+        Array(array).take(count)
+      end
+
+      # Partition array values into fixed-size groups
+      #
+      # @example
+      #   fn = Dry::Transformer(:partition, 2)
+      #
+      #   fn.call([1, 2, 3]) # => [[1, 2], [3]]
+      #
+      # @param [Array] array The input array
+      # @param [Integer] size The group size
+      #
+      # @return [Array<Array>]
+      #
+      # @api public
+      def self.partition(array, size)
+        Array(array).each_slice(size).to_a
+      end
+
       # Wrap array values using HashTransformations.nest function
       #
       # @example

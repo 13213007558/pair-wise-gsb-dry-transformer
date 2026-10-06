@@ -34,6 +34,17 @@ module Dry
       end
       alias_method :[], :call
 
+      # Run the composition as a fused streaming pipeline.
+      #
+      # @return [Object]
+      #
+      # @api public
+      def stream(input, reducer = Undefined, initial = Undefined, &block)
+        Flow[self].transduce(input, reducer, initial, &block)
+      end
+
+      alias_method :transduce, :stream
+
       # @see Function#compose
       #
       # @api public
