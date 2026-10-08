@@ -175,6 +175,25 @@ module Dry
         base = keys.inject({}) { |a, e| a.merge(e => nil) }
         map_array(array, ->(v) { base.merge(v) })
       end
+
+      # Stable sort values using one pass and bounded external runs.
+      #
+      # @example
+      #   fn = t(:stable_sort, keys: [-> v { v[:name] }], budget: 100)
+      #
+      # @param [Enumerable] input The enumerable input
+      # @param [Hash] options Sort keys, directions, null positions, and budgets
+      #
+      # @return [Enumerator]
+      #
+      # @api public
+      def self.stable_sort(input, options = {})
+        StableSort.new(input, **options).each
+      end
+
+      class << self
+        alias_method :external_sort, :stable_sort
+      end
     end
   end
 end
